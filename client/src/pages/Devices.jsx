@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../api';
+import api, { getSocketUrl } from '../api';
 import { Power, Trash2, Edit2, Plus, Zap, Activity, Cpu, X, Tv, Wind, Lightbulb, Thermometer, Clock, ShieldCheck, ToggleLeft, ToggleRight, Calendar, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
@@ -111,7 +111,7 @@ const Devices = () => {
 
   useEffect(() => {
     fetchDevices();
-    const socket = io('http://localhost:5000');
+    const socket = io(getSocketUrl());
     
     api.get('/auth/me').then(res => {
        if (res.data?._id) socket.emit('join', res.data._id);

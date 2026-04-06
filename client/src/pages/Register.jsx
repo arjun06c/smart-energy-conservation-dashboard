@@ -20,7 +20,9 @@ const Register = () => {
       await register(username, password);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      const msg = err.response?.data?.message || err.message || 'Registration failed';
+      const status = err.response?.status ? ` [${err.response.status}]` : '';
+      setError(`${msg}${status}`);
     } finally {
       setLoading(false);
     }

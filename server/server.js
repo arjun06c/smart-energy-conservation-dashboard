@@ -15,19 +15,23 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
-  cors: {
-    origin: '*',
-  }
+  cors: { origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'] }
 });
 
-// Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: '*' }));
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/devices', deviceRoutes);
 app.use('/api/reports', reportRoutes);
+
+app.get('/api/status', (req, res) => {
+  res.json({ 
+    status: 'online', 
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected' 
+  });
+});
 
 // Socket.io real-time simulation
 io.on('connection', (socket) => {

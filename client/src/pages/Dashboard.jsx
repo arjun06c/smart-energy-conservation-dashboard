@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import api from '../api';
+import api, { getSocketUrl } from '../api';
 import { io } from 'socket.io-client';
 import { Activity, Zap, DollarSign, Leaf, AlertCircle, TrendingUp, Clock, Grid, Layers, Plus, CheckCircle2, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -82,7 +82,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
-    const socket = io('http://localhost:5000');
+    const socket = io(getSocketUrl());
     api.get('/auth/me').then(res => { if (res.data?._id) socket.emit('join', res.data._id); });
     socket.on('energyUpdate', (update) => {
       const incomingEnergy = parseFloat(update.liveEnergy) || 0;

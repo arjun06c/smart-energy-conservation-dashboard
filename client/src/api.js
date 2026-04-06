@@ -1,8 +1,14 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 });
+
+// Helper to get the base URL for sockets (remove /api suffix)
+export const getSocketUrl = () => {
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  return apiUrl.replace(/\/api\/?$/, '');
+};
 
 // Add a request interceptor to attach the JWT token
 api.interceptors.request.use(
